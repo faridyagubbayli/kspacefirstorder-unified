@@ -1,0 +1,84 @@
+name: CI - Windows
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-openmp:
+    runs-on: windows-latest
+    name: Windows - OpenMP Backend
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Configure CMake (OpenMP Only)
+      run: cmake -B build -DUSE_CUDA=OFF -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Release
+    
+    - name: Build
+      run: cmake --build build --config Release -j
+    
+    - name: Test executable exists
+      run: Test-Path build/src/Release/kspaceFirstOrder.exe
+      shell: powershell
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: kspaceFirstOrder-windows-openmp
+        path: build/src/Release/kspaceFirstOrder.exe
+
+  build-cuda:
+    runs-on: windows-latest
+    name: Windows - CUDA Backend
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install CUDA Toolkit
+      uses: Jimver/cuda-toolkit@v0.2.14
+      with:
+        cuda: '12.3.2'
+    
+    - name: Configure CMake (CUDA Only)
+      run: cmake -B build -DUSE_CUDA=ON -DUSE_OPENMP=OFF -DCMAKE_BUILD_TYPE=Release
+    
+    - name: Build
+      run: cmake --build build --config Release -j
+    
+    - name: Test executable exists
+      run: Test-Path build/src/Release/kspaceFirstOrder.exe
+      shell: powershell
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: kspaceFirstOrder-windows-cuda
+        path: build/src/Release/kspaceFirstOrder.exe
+
+  build-dual:
+    runs-on: windows-latest
+    name: Windows - OpenMP + CUDA
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install CUDA Toolkit
+      uses: Jimver/cuda-toolkit@v0.2.14
+      with:
+        cuda: '12.3.2'
+    
+    - name: Configure CMake (Both Backends)
+      run: cmake -B build -DUSE_CUDA=ON -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Release
+    
+    - name: Build
+      run: cmake --build build --config Release -j
+    
+    - name: Test executable exists
+      run: Test-Path build/src/Release/kspaceFirstOrder.exe
+      shell: powershell
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: kspaceFirstOrder-windows-dual
+        path: build/src/Release/kspaceFirstOrder.exe

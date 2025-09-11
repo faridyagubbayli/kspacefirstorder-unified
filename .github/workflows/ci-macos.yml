@@ -1,0 +1,50 @@
+name: CI - macOS
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-openmp:
+    runs-on: macos-latest
+    name: macOS - OpenMP Backend
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Configure CMake (OpenMP Only)
+      run: cmake -B build -DUSE_CUDA=OFF -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Release
+    
+    - name: Build
+      run: cmake --build build -j$(sysctl -n hw.ncpu)
+    
+    - name: Test executable exists
+      run: test -f build/src/kspaceFirstOrder
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: kspaceFirstOrder-macos-openmp
+        path: build/src/kspaceFirstOrder
+
+  build-no-backends:
+    runs-on: macos-latest
+    name: macOS - Core Only (No Backends)
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Configure CMake (Core Only)
+      run: cmake -B build -DUSE_CUDA=OFF -DUSE_OPENMP=OFF -DCMAKE_BUILD_TYPE=Release
+    
+    - name: Build
+      run: cmake --build build -j$(sysctl -n hw.ncpu)
+    
+    - name: Test executable exists
+      run: test -f build/src/kspaceFirstOrder
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: kspaceFirstOrder-macos-core
+        path: build/src/kspaceFirstOrder
