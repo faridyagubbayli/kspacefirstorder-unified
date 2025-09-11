@@ -1,7 +1,7 @@
 # Core library (always built)
 add_subdirectory(core)
 
-# Backend-specific libraries
+# Backend-specific libraries (depend on core)
 if(USE_CUDA)
     add_subdirectory(backends/cuda)
 endif()
@@ -26,7 +26,8 @@ target_link_libraries(kspaceFirstOrder
     $<$<BOOL:${PLATFORM_UNIX}>:kspace_unix>
     $<$<BOOL:${PLATFORM_WINDOWS}>:kspace_windows>
     ${HDF5_LIBRARIES}
-    $<$<BOOL:${USE_CUDA}>:CUDA::cudart CUDA::cufft>
+    $<$<BOOL:${USE_CUDA}>:CUDA::cudart>
+    $<$<BOOL:${USE_CUDA}>:CUDA::cufft>
     $<$<BOOL:${USE_OPENMP}>:${FFTW_LIBRARIES}>
 )
 

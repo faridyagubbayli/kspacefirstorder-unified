@@ -14,16 +14,26 @@ if(USE_OPENMP)
 
     # Create OpenMP library
     add_library(kspace_openmp ${OPENMP_SOURCES} ${OPENMP_HEADERS})
-    target_include_directories(kspace_openmp PUBLIC 
+    target_include_directories(kspace_openmp PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/src
         ${CMAKE_SOURCE_DIR}/src/core
+        ${CMAKE_SOURCE_DIR}/src/core/Parameters
+        ${CMAKE_SOURCE_DIR}/src/core/Logger
+        ${CMAKE_SOURCE_DIR}/src/core/MatrixClasses
+        ${CMAKE_SOURCE_DIR}/src/core/Containers
+        ${CMAKE_SOURCE_DIR}/src/core/OutputStreams
+        ${CMAKE_SOURCE_DIR}/src/core/HDF5
+        ${CMAKE_SOURCE_DIR}/src/core/Utils
         ${HDF5_INCLUDE_DIRS}
         ${FFTW_INCLUDE_DIRS}
     )
-    
+
     # Link FFTW libraries
     target_link_libraries(kspace_openmp PUBLIC ${FFTW_LIBRARIES})
+
+    # Link to core library for shared headers
+    target_link_libraries(kspace_openmp PUBLIC kspace_core)
     
     # Link OpenMP if found
     if(OpenMP_CXX_FOUND)

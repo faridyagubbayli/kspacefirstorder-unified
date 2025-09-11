@@ -38,8 +38,8 @@
 
 #include <MatrixClasses/FftwRealMatrix.h>
 
-#include <Parameters/Parameters.h>
-#include <Logger/Logger.h>
+#include <Parameters.h>
+#include <Logger.h>
 
 //--------------------------------------------------------------------------------------------------------------------//
 //---------------------------------------------------- Constants -----------------------------------------------------//

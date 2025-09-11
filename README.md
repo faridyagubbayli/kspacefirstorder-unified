@@ -97,6 +97,10 @@ brew install cmake git
 git clone https://github.com/waltsims/kspaceFirstOrder-unified.git
 cd kspaceFirstOrder-unified
 
+# (Optional) Install system dependencies automatically
+# Supports Ubuntu/Debian, Fedora/RHEL, Arch, and macOS (Homebrew)
+./install_dependencies.sh
+
 # Create build directory
 mkdir build && cd build
 
@@ -108,6 +112,24 @@ cmake .. -DUSE_CUDA=ON   # For CUDA support
 # Build
 cmake --build . --config Release --parallel
 ```
+
+### One-time Dependency Installer (Optional)
+
+For a smoother setup on Linux and macOS, you can use the provided installer to install CMake and system libraries (HDF5, FFTW3, pkg-config) via your native package manager.
+
+```bash
+# From the repository root
+./install_dependencies.sh
+```
+
+What it does:
+- Detects your OS (Ubuntu/Debian, Fedora/RHEL, Arch, macOS)
+- Installs required packages using apt/dnf/pacman/brew
+- Verifies installation of CMake, HDF5, FFTW3, and a C++ compiler
+
+Notes:
+- On macOS you need Homebrew installed first. If you do not have it, the script will print the install command.
+- If a system package is not available or too old, the CMake build will still fall back to building dependencies from source via FetchContent.
 
 ### Detailed Build Instructions
 
