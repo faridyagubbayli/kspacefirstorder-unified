@@ -452,14 +452,6 @@ void KSpaceFirstOrderSolver::compute()
  */
 size_t KSpaceFirstOrderSolver::getMemoryUsage() const
 {
-  // Linux build
-  #ifdef __linux__
-    struct rusage memUsage;
-    getrusage(RUSAGE_SELF, &memUsage);
-
-    return memUsage.ru_maxrss >> 10;
-  #endif
-
   // Windows build
   #ifdef _WIN64
     HANDLE hProcess;

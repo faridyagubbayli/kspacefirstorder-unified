@@ -28,6 +28,15 @@ log_error() {
     echo -e "${RED}✗${NC} $1"
 }
 
+# Determine sudo usage (act often runs as root without sudo)
+if [ "$(id -u)" -eq 0 ]; then
+    SUDO=""
+elif command -v sudo >/dev/null 2>&1; then
+    SUDO="sudo"
+else
+    SUDO=""
+fi
+
 # Function to detect OS
 detect_os() {
     log_info "Detecting operating system..."
@@ -67,12 +76,12 @@ install_ubuntu() {
 
     # Update package list
     log_info "Updating package list..."
-    sudo apt-get update
+    ${SUDO} apt-get update
 
     # Install required packages
     REQUIRED_PACKAGES="build-essential cmake libhdf5-dev libfftw3-dev pkg-config"
     log_info "Installing: $REQUIRED_PACKAGES"
-    sudo apt-get install -y $REQUIRED_PACKAGES
+    ${SUDO} apt-get install -y $REQUIRED_PACKAGES
 
     log_success "Ubuntu/Debian dependencies installed successfully"
 }
@@ -84,7 +93,7 @@ install_fedora() {
     # Install required packages
     REQUIRED_PACKAGES="gcc-c++ cmake hdf5-devel fftw-devel pkgconfig"
     log_info "Installing: $REQUIRED_PACKAGES"
-    sudo dnf install -y $REQUIRED_PACKAGES
+    ${SUDO} dnf install -y $REQUIRED_PACKAGES
 
     log_success "Fedora/RHEL dependencies installed successfully"
 }
@@ -96,7 +105,7 @@ install_arch() {
     # Install required packages
     REQUIRED_PACKAGES="gcc cmake hdf5 fftw pkgconf"
     log_info "Installing: $REQUIRED_PACKAGES"
-    sudo pacman -S --needed $REQUIRED_PACKAGES
+    ${SUDO} pacman -S --needed $REQUIRED_PACKAGES
 
     log_success "Arch Linux dependencies installed successfully"
 }

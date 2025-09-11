@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.18)
 
 if(USE_CUDA)
-    project(kspaceFirstOrder VERSION 3.6 LANGUAGES CXX CUDA)
+    project(kspaceFirstOrder VERSION 3.6 LANGUAGES C CXX CUDA)
 else()
-    project(kspaceFirstOrder VERSION 3.6 LANGUAGES CXX)
+    project(kspaceFirstOrder VERSION 3.6 LANGUAGES C CXX)
 endif()
 
 # Set macOS SDK path if on macOS
