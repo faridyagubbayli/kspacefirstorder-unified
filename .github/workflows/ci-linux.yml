@@ -13,10 +13,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Install system dependencies
+    - name: Install dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential cmake
+        chmod +x ./install_dependencies.sh
+        ./install_dependencies.sh
     
     - name: Configure CMake (OpenMP Only)
       run: cmake -B build -DUSE_CUDA=OFF -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Release
@@ -44,10 +44,15 @@ jobs:
       with:
         cuda: '12.3.2'
     
-    - name: Install system dependencies
+    - name: Verify nvcc
       run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential cmake
+        which nvcc || true
+        nvcc --version
+    
+    - name: Install dependencies
+      run: |
+        chmod +x ./install_dependencies.sh
+        ./install_dependencies.sh
     
     - name: Configure CMake (CUDA Only)
       run: cmake -B build -DUSE_CUDA=ON -DUSE_OPENMP=OFF -DCMAKE_BUILD_TYPE=Release
@@ -75,10 +80,15 @@ jobs:
       with:
         cuda: '12.3.2'
     
-    - name: Install system dependencies
+    - name: Verify nvcc
       run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential cmake
+        which nvcc || true
+        nvcc --version
+    
+    - name: Install dependencies
+      run: |
+        chmod +x ./install_dependencies.sh
+        ./install_dependencies.sh
     
     - name: Configure CMake (Both Backends)
       run: cmake -B build -DUSE_CUDA=ON -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Release

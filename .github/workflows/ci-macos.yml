@@ -12,6 +12,12 @@ jobs:
     name: macOS - OpenMP Backend
     steps:
     - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        chmod +x ./install_dependencies.sh
+        ./install_dependencies.sh
+        # install_dependencies.sh now installs libomp and exports brew paths to GITHUB_ENV
     
     - name: Configure CMake (OpenMP Only)
       run: cmake -B build -DUSE_CUDA=OFF -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Release

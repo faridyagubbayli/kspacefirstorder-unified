@@ -123,11 +123,22 @@ install_macos() {
     fi
 
     # Install required packages
-    REQUIRED_PACKAGES="cmake hdf5 fftw pkg-config"
+    # libomp provides OpenMP runtime for Apple Clang
+    REQUIRED_PACKAGES="cmake hdf5 fftw pkg-config libomp"
     log_info "Installing: $REQUIRED_PACKAGES"
     brew install $REQUIRED_PACKAGES
 
     log_success "macOS dependencies installed successfully"
+
+    # If running in GitHub Actions, export pkg-config and CMake hints for dependencies
+    if [[ -n "${GITHUB_ENV}" ]]; then
+        BREW_PREFIX=$(brew --prefix)
+        echo "PKG_CONFIG_PATH=${BREW_PREFIX}/opt/fftw/lib/pkgconfig:${BREW_PREFIX}/opt/hdf5/lib/pkgconfig:${PKG_CONFIG_PATH}" >> "${GITHUB_ENV}"
+        echo "CMAKE_PREFIX_PATH=${BREW_PREFIX}/opt/fftw;${BREW_PREFIX}/opt/hdf5;${CMAKE_PREFIX_PATH}" >> "${GITHUB_ENV}"
+        echo "HDF5_ROOT=${BREW_PREFIX}/opt/hdf5" >> "${GITHUB_ENV}"
+        echo "FFTW_ROOT=${BREW_PREFIX}/opt/fftw" >> "${GITHUB_ENV}"
+        log_info "Exported Homebrew pkg-config and CMake paths to GITHUB_ENV"
+    fi
 }
 
 # Function to verify installations
