@@ -92,7 +92,6 @@ if(USE_CUDA)
         message(WARNING "CUDA Toolkit not found - CUDA backend disabled")
         set(USE_CUDA OFF)
     else()
-        enable_language(CUDA)
         # Set CUDA architectures
         set(CMAKE_CUDA_ARCHITECTURES 50 52 53 60 61 62 70 72 75 80 87 89 90 90a)
     endif()

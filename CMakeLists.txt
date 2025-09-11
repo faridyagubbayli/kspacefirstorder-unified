@@ -1,19 +1,22 @@
 cmake_minimum_required(VERSION 3.18)
-project(kspaceFirstOrder VERSION 3.6 LANGUAGES CXX)
+
+if(USE_CUDA)
+    project(kspaceFirstOrder VERSION 3.6 LANGUAGES CXX CUDA)
+else()
+    project(kspaceFirstOrder VERSION 3.6 LANGUAGES CXX)
+endif()
 
 # Set macOS SDK path if on macOS
 if(APPLE)
-    set(CMAKE_OSX_SYSROOT "/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk")
+    # The following line is removed as it's not portable.
+    # set(CMAKE_OSX_SYSROOT "/Library/Developer/CommandLineTools/SDKs/MacOSX15.5.sdk")
 endif()
-
-# Set C++ standard
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Options
 option(USE_CUDA "Enable CUDA backend" OFF)
 option(USE_OPENMP "Enable OpenMP backend" ON)
 option(BUILD_TESTS "Build test suite" OFF)
+option(ENABLE_NATIVE_ARCH "Enable march=native for performance" ON)
 
 # Include CMake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

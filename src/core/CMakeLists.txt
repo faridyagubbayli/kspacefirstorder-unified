@@ -47,6 +47,10 @@ set(CORE_HEADERS
 
 # Create core library
 add_library(kspace_core ${CORE_SOURCES} ${CORE_HEADERS})
+set_target_properties(kspace_core PROPERTIES
+    CXX_STANDARD 11
+    CXX_STANDARD_REQUIRED ON
+)
 target_include_directories(kspace_core PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/src
@@ -56,6 +60,18 @@ target_include_directories(kspace_core PUBLIC
 
 # Link HDF5 to core library
 target_link_libraries(kspace_core PUBLIC ${HDF5_LIBRARIES})
+
+# Link compiler flags
+target_link_libraries(kspace_core PUBLIC kspace_compiler_flags)
+
+# Add platform-specific definitions
+if(PLATFORM_LINUX)
+    target_compile_definitions(kspace_core PUBLIC __PLATFORM_LINUX__)
+elseif(PLATFORM_MACOS)
+    target_compile_definitions(kspace_core PUBLIC __PLATFORM_MACOS__)
+elseif(PLATFORM_WINDOWS)
+    target_compile_definitions(kspace_core PUBLIC __PLATFORM_WINDOWS__)
+endif()
 
 # Add FFTW includes if using OpenMP
 if(USE_OPENMP AND FFTW_FOUND)

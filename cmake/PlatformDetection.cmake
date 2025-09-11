@@ -11,13 +11,4 @@ else()
     message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
 endif()
 
-# Set platform-specific defines
-if(PLATFORM_LINUX)
-    add_definitions(-D__PLATFORM_LINUX__)
-elseif(PLATFORM_MACOS)
-    add_definitions(-D__PLATFORM_MACOS__)
-elseif(PLATFORM_WINDOWS)
-    add_definitions(-D__PLATFORM_WINDOWS__)
-endif()
-
 

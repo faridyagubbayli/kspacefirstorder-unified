@@ -25,10 +25,6 @@ target_link_libraries(kspaceFirstOrder
     $<$<BOOL:${USE_OPENMP}>:kspace_openmp>
     $<$<BOOL:${PLATFORM_UNIX}>:kspace_unix>
     $<$<BOOL:${PLATFORM_WINDOWS}>:kspace_windows>
-    ${HDF5_LIBRARIES}
-    $<$<BOOL:${USE_CUDA}>:CUDA::cudart>
-    $<$<BOOL:${USE_CUDA}>:CUDA::cufft>
-    $<$<BOOL:${USE_OPENMP}>:${FFTW_LIBRARIES}>
 )
 
 # Include directories for fetched dependencies
