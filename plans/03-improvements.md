@@ -38,8 +38,9 @@ The following plan outlines key areas for improvement and a proposed roadmap for
 
 **Recommendations:**
 1.  **Implement a Compiler Cache for Build Acceleration:** Integrate a compiler cache (e.g., `sccache`) into the development workflow. This is the most effective and cross-platform strategy for dramatically speeding up builds. Once cached, dependency builds become nearly instantaneous, even in clean build directories. This approach provides the convenience of `FetchContent` without the performance penalty.
-2.  **Update Build Process and Documentation:** The primary recommended development workflow should be based on `FetchContent` augmented by a compiler cache. The `README.md` and a new `CONTRIBUTING.md` must be updated with clear instructions on how to install and configure `sccache`. The `install_dependencies.sh` script can be retained as an optional convenience, particularly for CI environments, but the compiler cache should be presented as the superior solution for local development.
-3.  **CI Pipeline Hardening:**
+2.  **Adopt Ninja as the Recommended CMake Generator:** Introduce Ninja as the preferred build system generator for its superior performance, especially for large-scale C++ projects. Update documentation to guide developers on installing and using Ninja with CMake.
+3.  **Update Build Process and Documentation:** The primary recommended development workflow should be based on `FetchContent` augmented by a compiler cache. The `README.md` and a new `CONTRIBUTING.md` must be updated with clear instructions on how to install and configure `sccache`. The `install_dependencies.sh` script can be retained as an optional convenience, particularly for CI environments, but the compiler cache should be presented as the superior solution for local development.
+4.  **CI Pipeline Hardening:**
     *   Correct the CI badge in the `README.md`.
     *   Expand CI coverage to include static analysis and code formatting checks mentioned in Pillar 1.
     *   Consider adding automated performance regression testing to the CI pipeline to catch performance degradation before it merges to the main branch.
@@ -70,6 +71,7 @@ This is a high-level roadmap to guide the implementation of these improvements.
     *   ~~Update `README.md` to clarify project structure, introduce the compiler cache strategy, and fix the CI badge.~~ (Completed 2025-09-12)
     *   ~~Provide instructions for setting up `sccache`.~~ (Completed 2025-09-12)
     *   ~~Introduce `.clang-format` and format the entire codebase.~~ (Completed 2025-09-12)
+    *   Adopt Ninja as the recommended CMake generator and update documentation.
 
 *   **Phase 2 (Automation & Quality):**
     *   ~~Integrate `clang-format` checks into the CI pipeline.~~ (Completed locally via pre-commit hooks 2025-09-12; CI integration pending)
