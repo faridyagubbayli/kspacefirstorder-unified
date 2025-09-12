@@ -13,11 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Install dependencies
-      run: |
-        chmod +x ./install_dependencies.sh
-        ./install_dependencies.sh
-    
     - name: Configure CMake (OpenMP Only)
       run: cmake -B build -DUSE_CUDA=OFF -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Release
     
@@ -49,11 +44,6 @@ jobs:
         which nvcc || true
         nvcc --version
     
-    - name: Install dependencies
-      run: |
-        chmod +x ./install_dependencies.sh
-        ./install_dependencies.sh
-    
     - name: Configure CMake (CUDA Only)
       run: cmake -B build -DUSE_CUDA=ON -DUSE_OPENMP=OFF -DCMAKE_BUILD_TYPE=Release
     
@@ -84,11 +74,6 @@ jobs:
       run: |
         which nvcc || true
         nvcc --version
-    
-    - name: Install dependencies
-      run: |
-        chmod +x ./install_dependencies.sh
-        ./install_dependencies.sh
     
     - name: Configure CMake (Both Backends)
       run: cmake -B build -DUSE_CUDA=ON -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Release

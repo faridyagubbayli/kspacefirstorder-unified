@@ -12,32 +12,17 @@ jobs:
     name: Windows - OpenMP Backend
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Setup MSYS2
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: MINGW64
-        update: true
-        install: >-
-          mingw-w64-x86_64-toolchain
-          mingw-w64-x86_64-cmake
-          mingw-w64-x86_64-ninja
-          mingw-w64-x86_64-pkgconf
-          mingw-w64-x86_64-fftw
-          mingw-w64-x86_64-hdf5
 
-    - name: Configure (MSYS2 OpenMP)
-      shell: msys2 {0}
-      run: cmake -S . -B build -G Ninja -DUSE_CUDA=OFF -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Release
+    - name: Configure (OpenMP)
+      run: cmake -S . -B build -DUSE_CUDA=OFF -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Release
 
-    - name: Build (MSYS2 OpenMP)
-      shell: msys2 {0}
-      run: cmake --build build -j
-    
-    - name: Test executable exists (MSYS2)
-      shell: msys2 {0}
-      run: test -f build/src/kspaceFirstOrder.exe
-    
+    - name: Build (OpenMP)
+      run: cmake --build build --config Release -j
+
+    - name: Test executable exists
+      run: Test-Path build/src/Release/kspaceFirstOrder.exe
+      shell: powershell
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
