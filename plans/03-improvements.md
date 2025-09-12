@@ -1,5 +1,7 @@
 # Strategic Improvement Plan for kspaceFirstOrder
 
+**Status as of: 2025-09-12**
+
 ## 1. Executive Summary
 
 This document presents a strategic plan to enhance the `kspaceFirstOrder` project by addressing architectural, procedural, and technical debt. The current project structure, while functional, presents potential challenges to developer onboarding due to the presence of legacy reference codebases alongside the active, unified source tree.
@@ -65,17 +67,18 @@ The following plan outlines key areas for improvement and a proposed roadmap for
 This is a high-level roadmap to guide the implementation of these improvements.
 
 *   **Phase 1 (Foundation):**
-    *   Update `README.md` to clarify project structure, introduce the compiler cache strategy, and fix the CI badge.
-    *   Provide instructions for setting up `sccache`.
-    *   Introduce `.clang-format` and format the entire codebase.
+    *   ~~Update `README.md` to clarify project structure, introduce the compiler cache strategy, and fix the CI badge.~~ (Completed 2025-09-12)
+    *   ~~Provide instructions for setting up `sccache`.~~ (Completed 2025-09-12)
+    *   ~~Introduce `.clang-format` and format the entire codebase.~~ (Completed 2025-09-12)
 
 *   **Phase 2 (Automation & Quality):**
-    *   Integrate `clang-format` checks into the CI pipeline.
+    *   ~~Integrate `clang-format` checks into the CI pipeline.~~ (Completed locally via pre-commit hooks 2025-09-12; CI integration pending)
     *   Integrate static analysis (Clang-Tidy) into the CI pipeline.
-    *   Create `CONTRIBUTING.md`.
+    *   ~~Create `CONTRIBUTING.md`.~~ (Completed 2025-09-12)
 
 *   **Phase 3 (Modernization):**
     *   Begin migration to C++17.
+    *   Refactor core classes to improve modularity, reduce complexity, and shorten file lengths.
     *   Investigate and integrate a performance profiling framework.
     *   Explore adding performance regression testing to CI.
 
