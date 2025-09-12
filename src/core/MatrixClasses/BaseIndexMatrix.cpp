@@ -6,27 +6,33 @@
  *            Brno University of Technology \n
  *            jarosjir@fit.vutbr.cz
  *
- * @brief     The implementation file containing the base class for index matrices (based on the size_t datatype).
+ * @brief     The implementation file containing the base class for index
+ * matrices (based on the size_t datatype).
  *
  * @version   kspaceFirstOrder 2.17
  *
  * @date      26 July      2011, 14:17 (created) \n
  *            11 February  2020, 14:43 (revised)
  *
- * @copyright Copyright (C) 2011 - 2020 SC\@FIT Research Group, Brno University of Technology, Brno, CZ.
+ * @copyright Copyright (C) 2011 - 2020 SC\@FIT Research Group, Brno University
+ * of Technology, Brno, CZ.
  *
- * This file is part of the C++ extension of the [k-Wave Toolbox](http://www.k-wave.org).
+ * This file is part of the C++ extension of the [k-Wave
+ * Toolbox](http://www.k-wave.org).
  *
- * k-Wave is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * k-Wave is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * k-Wave is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for
- * more details.
+ * k-Wave is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with k-Wave.
- * If not, see [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/).
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with k-Wave. If not, see
+ * [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/).
  */
 
 #ifdef __x86_64__
@@ -34,80 +40,72 @@
 #else
 #include "sse2neon.h"
 #endif
-#include <assert.h>
-
 #include <MatrixClasses/BaseIndexMatrix.h>
 #include <Utils/DimensionSizes.h>
+#include <assert.h>
 
 //--------------------------------------------------------------------------------------------------------------------//
-//------------------------------------------------- Public methods ---------------------------------------------------//
+//------------------------------------------------- Public methods
+//---------------------------------------------------//
 //--------------------------------------------------------------------------------------------------------------------//
 
 /**
  * Default constructor.
  */
 BaseIndexMatrix::BaseIndexMatrix()
-  : BaseMatrix(),
-    mDimensionSizes(),
-    mSize(0),
-    mCapacity(0),
-    mData(nullptr)
-{
-
-}// end of BaseIndexMatrix
+    : BaseMatrix(),
+      mDimensionSizes(),
+      mSize(0),
+      mCapacity(0),
+      mData(nullptr) {}  // end of BaseIndexMatrix
 //----------------------------------------------------------------------------------------------------------------------
 
 /**
  * Zero all allocated elements.
  */
-void BaseIndexMatrix::zeroMatrix()
-{
-  #pragma omp parallel for simd schedule(simd:static)
-  for (size_t i = 0; i < mCapacity; i++)
-  {
+void BaseIndexMatrix::zeroMatrix() {
+#pragma omp parallel for simd schedule(simd : static)
+  for (size_t i = 0; i < mCapacity; i++) {
     mData[i] = size_t(0);
   }
-}// end of zeroMatrix
+}  // end of zeroMatrix
 //----------------------------------------------------------------------------------------------------------------------
 
-
 //--------------------------------------------------------------------------------------------------------------------//
-//------------------------------------------------ Protected methods -------------------------------------------------//
+//------------------------------------------------ Protected methods
+//-------------------------------------------------//
 //--------------------------------------------------------------------------------------------------------------------//
 
 /**
  * Memory allocation based on the capacity and aligned at kDataAlignment.
  */
-void BaseIndexMatrix::allocateMemory()
-{
+void BaseIndexMatrix::allocateMemory() {
   /* No memory allocated before this function*/
   assert(mData == nullptr);
 
-  mData = (size_t*) _mm_malloc(mCapacity * sizeof (size_t), kDataAlignment);
+  mData = (size_t*)_mm_malloc(mCapacity * sizeof(size_t), kDataAlignment);
 
-  if (!mData)
-  {
+  if (!mData) {
     throw std::bad_alloc();
   }
 
   zeroMatrix();
-}// end of allocateMemory
+}  // end of allocateMemory
 //----------------------------------------------------------------------------------------------------------------------
 
 /**
  * Free memory.
  */
-void BaseIndexMatrix::freeMemory()
-{
-  if (mData)
-  {
-     _mm_free(mData);
+void BaseIndexMatrix::freeMemory() {
+  if (mData) {
+    _mm_free(mData);
   }
 
   mData = nullptr;
-}// end of freeMemory
+}  // end of freeMemory
 //----------------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------------//
-//------------------------------------------------ Private methods ---------------------------------------------------//
+//------------------------------------------------ Private methods
+//---------------------------------------------------//
 //--------------------------------------------------------------------------------------------------------------------//

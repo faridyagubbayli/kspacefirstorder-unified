@@ -6,27 +6,33 @@
  *            Brno University of Technology \n
  *            jarosjir@fit.vutbr.cz
  *
- * @brief     The header file containing metadata about matrices stored in the matrix container.
+ * @brief     The header file containing metadata about matrices stored in the
+ * matrix container.
  *
  * @version   kspaceFirstOrder 2.17
  *
  * @date      27 August    2017, 08:54 (created) \n
  *            11 February  2020, 14:31 (revised)
  *
- * @copyright Copyright (C) 2017 - 2020 SC\@FIT Research Group, Brno University of Technology, Brno, CZ.
+ * @copyright Copyright (C) 2017 - 2020 SC\@FIT Research Group, Brno University
+ * of Technology, Brno, CZ.
  *
- * This file is part of the C++ extension of the [k-Wave Toolbox](http://www.k-wave.org).
+ * This file is part of the C++ extension of the [k-Wave
+ * Toolbox](http://www.k-wave.org).
  *
- * k-Wave is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * k-Wave is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * k-Wave is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for
- * more details.
+ * k-Wave is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with k-Wave.
- * If not, see [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/).
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with k-Wave. If not, see
+ * [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/).
  */
 
 #ifndef MATRIX_RECORD_H
@@ -38,14 +44,12 @@
  * @struct MatrixRecord
  * @brief  A structure storing details about the matrix in the matrix container.
  */
-struct MatrixRecord
-{
+struct MatrixRecord {
   /**
    * @enum  MatrixType
    * @brief All possible types of the matrix.
    */
-  enum class MatrixType
-  {
+  enum class MatrixType {
     /// Matrix for real values.
     kReal,
     /// Matrix for complex values.
@@ -60,13 +64,12 @@ struct MatrixRecord
 
   /// Default constructor.
   MatrixRecord()
-    : matrixPtr(nullptr),
-      matrixType(MatrixType::kReal),
-      dimensionSizes(),
-      loadData(false),
-      checkpoint(false),
-      matrixName()
-  {};
+      : matrixPtr(nullptr),
+        matrixType(MatrixType::kReal),
+        dimensionSizes(),
+        loadData(false),
+        checkpoint(false),
+        matrixName() {};
 
   /**
    * @brief Set all values for the record.
@@ -76,18 +79,15 @@ struct MatrixRecord
    * @param [in] checkpoint     - Checkpoint this matrix?
    * @param [in] matrixName     - HDF5 matrix name.
    */
-  MatrixRecord(const MatrixType     matrixType,
-               const DimensionSizes dimensionSizes,
-               const bool           loadData,
-               const bool           checkpoint,
-               const MatrixName&    matrixName)
-    : matrixPtr(nullptr),
-      matrixType(matrixType),
-      dimensionSizes(dimensionSizes),
-      loadData(loadData),
-      checkpoint(checkpoint),
-      matrixName(matrixName)
-  {};
+  MatrixRecord(const MatrixType matrixType, const DimensionSizes dimensionSizes,
+               const bool loadData, const bool checkpoint,
+               const MatrixName& matrixName)
+      : matrixPtr(nullptr),
+        matrixType(matrixType),
+        dimensionSizes(dimensionSizes),
+        loadData(loadData),
+        checkpoint(checkpoint),
+        matrixName(matrixName) {};
 
   /// Copy constructor.
   MatrixRecord(const MatrixRecord&) = default;
@@ -97,18 +97,19 @@ struct MatrixRecord
   ~MatrixRecord() = default;
 
   /// Pointer to the matrix object.
-  BaseMatrix*    matrixPtr;
+  BaseMatrix* matrixPtr;
   /// Matrix data type.
-  MatrixType     matrixType;
+  MatrixType matrixType;
   /// Matrix dimension sizes.
   DimensionSizes dimensionSizes;
   /// Is the matrix content loaded from the HDF5 file?
-  bool           loadData;
-  /// Is the matrix necessary to be staged in the file when checkpoint is enabled?
-  bool           checkpoint;
+  bool loadData;
+  /// Is the matrix necessary to be staged in the file when checkpoint is
+  /// enabled?
+  bool checkpoint;
   /// Matrix name in the HDF5 file.
-  MatrixName     matrixName;
-};// end of MatrixRecord
+  MatrixName matrixName;
+};  // end of MatrixRecord
 //----------------------------------------------------------------------------------------------------------------------
 
-#endif	/* MATRIX_RECORD_H */
+#endif /* MATRIX_RECORD_H */
