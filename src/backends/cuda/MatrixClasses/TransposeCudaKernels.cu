@@ -206,7 +206,7 @@ void TransposeCudaKernels::trasposeReal3DMatrixXY(float* outputMatrix,
 //----------------------------------------------------------------------------------------------------------------------
 
 //---------------------------------- Explicit instances of
-//TrasposeReal3DMatrixXY ------------------------------------//
+// TrasposeReal3DMatrixXY ------------------------------------//
 /// Transpose a real 3D matrix in the X-Y direction, input matrix padded, output
 /// matrix compact.
 template void TransposeCudaKernels::trasposeReal3DMatrixXY<

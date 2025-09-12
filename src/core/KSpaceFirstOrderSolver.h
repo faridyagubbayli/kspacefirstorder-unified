@@ -834,7 +834,7 @@ class KSpaceFirstOrderSolver {
   }
 
   //----------------------------- Getters for raw real, complex and index matrix
-  //data ------------------------------//
+  // data ------------------------------//
   /**
    * @brief  Get the pointer to raw matrix data of ComplexMatrix.
    * @param  [in] matrixIdx - Matrix id in the container.

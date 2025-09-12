@@ -334,7 +334,7 @@ void KSpaceFirstOrderSolver::loadInputData() {
 
     Logger::log(Logger::LogLevel::kFull, kOutFmtDone);
   } else {  //------------------------------------ First round of multi-leg
-            //simulation ---------------------------------------//
+            // simulation ---------------------------------------//
     // Create the output file
     Logger::log(Logger::LogLevel::kFull, kOutFmtCreatingOutputFile);
     Logger::flush(Logger::LogLevel::kFull);
