@@ -122,11 +122,23 @@ install_macos() {
         exit 1
     fi
 
-    # Install required packages
+    # Install required packages (skip ones already installed to avoid tap conflicts)
     # libomp provides OpenMP runtime for Apple Clang
-    REQUIRED_PACKAGES="cmake hdf5 fftw pkg-config libomp"
-    log_info "Installing: $REQUIRED_PACKAGES"
-    brew install $REQUIRED_PACKAGES
+    REQUIRED_PACKAGES=(cmake hdf5 fftw pkg-config libomp)
+    TO_INSTALL=()
+    for PKG in "${REQUIRED_PACKAGES[@]}"; do
+        if brew list --formula "$PKG" >/dev/null 2>&1; then
+            log_info "Already installed: $PKG (skipping)"
+        else
+            TO_INSTALL+=("$PKG")
+        fi
+    done
+    if [ ${#TO_INSTALL[@]} -gt 0 ]; then
+        log_info "Installing: ${TO_INSTALL[*]}"
+        brew install "${TO_INSTALL[@]}"
+    else
+        log_info "All required Homebrew packages already installed"
+    fi
 
     log_success "macOS dependencies installed successfully"
 
