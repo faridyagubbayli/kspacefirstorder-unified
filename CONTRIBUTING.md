@@ -91,7 +91,7 @@ To build and run the test suite:
 
 ## Code Style
 
-This project uses the **Google C++ Style Guide**. We use `.clang-format` to automatically enforce this style.
+This project uses the **Google C++ Style Guide** for both formatting and static analysis. We use `.clang-format` and `.clang-tidy` to automatically enforce these standards.
 
 Before submitting a pull request, please format your code:
 
@@ -101,6 +101,33 @@ clang-format -i --style=file $(find src -name "*.cpp" -o -name "*.h" -o -name "*
 ```
 
 **Note:** Code formatting is automatically checked in CI. Pull requests with formatting issues will fail to pass CI checks.
+
+### Static Analysis
+
+This project uses **Clang-Tidy** for static analysis to catch potential bugs, performance issues, and code quality problems. The analysis follows **Google C++ Style Guide** standards.
+
+Static analysis is run in CI on every push and pull request. The analysis includes:
+- **Google style compliance** (google-* checks)
+- **Bug detection** (bugprone-* checks)
+- **Code quality** (readability-*, misc-* checks)
+- **Performance issues** (performance-* checks)
+- **Modern C++ best practices** (modernize-* checks)
+
+You can run static analysis locally:
+
+```bash
+# Configure with compile_commands.json
+mkdir build && cd build
+cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CUDA=OFF -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Debug
+
+# Run clang-tidy on specific files
+clang-tidy ../src/some/file.cpp -p .
+
+# Or run on all source files
+find ../src -name "*.cpp" -o -name "*.cu" | xargs clang-tidy -p .
+```
+
+**Note:** Static analysis results are currently informational in CI. Once a baseline is established, critical issues will become CI failures.
 
 ### Pre-Commit Hooks
 
