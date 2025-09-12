@@ -35,6 +35,11 @@ if(USE_OPENMP)
         URL_HASH SHA256=56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467
     )
 
+    # Configure FFTW3 for single-precision (required by kspaceFirstOrder)
+    set(ENABLE_FLOAT ON CACHE BOOL "")
+    set(BUILD_TESTS OFF CACHE BOOL "")
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "")
+    
     # The FFTW 3.3.10 tarball uses a very old CMake version.
     # By setting this policy globally before making the content available,
     # we allow our modern CMake to build it.
@@ -44,9 +49,9 @@ if(USE_OPENMP)
     unset(CMAKE_POLICY_VERSION_MINIMUM)
 
     set(FFTW_FOUND TRUE)
-    set(FFTW_LIBRARIES fftw3)
+    set(FFTW_LIBRARIES fftw3f)
     set(FFTW_INCLUDE_DIRS ${fftw3_SOURCE_DIR}/api)
-    message(STATUS "✓ Built FFTW3 from source")
+    message(STATUS "✓ Built FFTW3 from source (single-precision)")
 endif()
 
 # Find CUDA (for CUDA backend)
@@ -71,9 +76,17 @@ if(USE_OPENMP)
         message(STATUS "✓ Found OpenMP, linking against OpenMP::OpenMP_CXX")
         target_link_libraries(kspace_openmp_flags INTERFACE OpenMP::OpenMP_CXX)
     else()
-        message(WARNING "OpenMP package not found. Attempting to enable with -fopenmp flag.")
-        # For Clang and GCC, -fopenmp is typically sufficient for both compiling and linking.
-        target_compile_options(kspace_openmp_flags INTERFACE -fopenmp)
-        target_link_libraries(kspace_openmp_flags INTERFACE -fopenmp)
+        # Check if we're using Apple Clang which doesn't support -fopenmp
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+            message(WARNING "Apple Clang detected - OpenMP not supported. Consider using Homebrew GCC:")
+            message(WARNING "  CC=gcc-15 CXX=g++-15 cmake ..")
+            message(WARNING "OpenMP backend will be disabled.")
+            set(USE_OPENMP OFF CACHE BOOL "" FORCE)
+        else()
+            message(WARNING "OpenMP package not found. Attempting to enable with -fopenmp flag.")
+            # For GCC and non-Apple Clang, -fopenmp is typically sufficient for both compiling and linking.
+            target_compile_options(kspace_openmp_flags INTERFACE -fopenmp)
+            target_link_libraries(kspace_openmp_flags INTERFACE -fopenmp)
+        endif()
     endif()
 endif()
