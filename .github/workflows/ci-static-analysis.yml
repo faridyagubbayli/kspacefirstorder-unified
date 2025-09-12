@@ -1,0 +1,66 @@
+name: Static Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  clang-tidy:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        exclude:
+          # Skip Windows for now due to complexity with MSVC integration
+          - os: windows-latest
+    runs-on: ${{ matrix.os }}
+    name: Clang-Tidy - ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install system dependencies (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake clang-tidy
+
+    - name: Install system dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install cmake llvm
+        echo "/usr/local/opt/llvm/bin" >> $GITHUB_PATH
+
+    - name: Configure CMake with compile_commands.json
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CUDA=OFF -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Debug
+
+    - name: Run Clang-Tidy
+      run: |
+        cd build
+        # Run clang-tidy on all source files with custom config
+        find ../src -name "*.cpp" -o -name "*.cu" | head -10 | xargs -I {} sh -c 'echo "Checking {}" && clang-tidy {} -p . || echo "Issues found in {}"' || true
+
+    - name: Run Clang-Tidy (full check)
+      run: |
+        cd build
+        # Count issues without failing (for initial baseline)
+        echo "Running Clang-Tidy analysis..."
+        find ../src -name "*.cpp" -o -name "*.cu" | xargs -I {} clang-tidy {} -p . 2>&1 | tee clang-tidy-results.txt || true
+
+        # Count warnings and errors
+        WARNINGS=$(grep -c "warning:" clang-tidy-results.txt || echo "0")
+        ERRORS=$(grep -c "error:" clang-tidy-results.txt || echo "0")
+
+        echo "=== Clang-Tidy Results ==="
+        echo "Warnings: $WARNINGS"
+        echo "Errors: $ERRORS"
+        echo "Total issues: $((WARNINGS + ERRORS))"
+
+        # For now, just report - don't fail CI
+        if [ "$WARNINGS" -gt 0 ] || [ "$ERRORS" -gt 0 ]; then
+          echo "Clang-Tidy found issues. Review the output above."
+          echo "Future: These will become CI failures once baseline is established."
+        fi

@@ -13,6 +13,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Install build tools
+      run: |
+        choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
+
     - name: Configure (OpenMP)
       run: cmake -S . -B build -DUSE_CUDA=OFF -DUSE_OPENMP=ON -DCMAKE_BUILD_TYPE=Release
 
@@ -34,7 +38,11 @@ jobs:
     name: Windows - CUDA Backend
     steps:
     - uses: actions/checkout@v4
-    
+
+    - name: Install build tools
+      run: |
+        choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
+
     - name: Install CUDA Toolkit
       uses: Jimver/cuda-toolkit@v0.2.24
       with:
@@ -67,7 +75,11 @@ jobs:
     name: Windows - OpenMP + CUDA
     steps:
     - uses: actions/checkout@v4
-    
+
+    - name: Install build tools
+      run: |
+        choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
+
     - name: Install CUDA Toolkit
       uses: Jimver/cuda-toolkit@v0.2.24
       with:
