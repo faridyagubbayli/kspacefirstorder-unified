@@ -100,7 +100,7 @@ Before submitting a pull request, please format your code:
 clang-format -i --style=file $(find src -name "*.cpp" -o -name "*.h" -o -name "*.cu" -o -name "*.cuh")
 ```
 
-We are working on integrating this into a pre-commit hook and a CI check to automate the process.
+**Note:** Code formatting is automatically checked in CI. Pull requests with formatting issues will fail to pass CI checks.
 
 ### Pre-Commit Hooks
 
