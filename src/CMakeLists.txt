@@ -19,12 +19,12 @@ endif()
 
 # Main executable
 add_executable(kspaceFirstOrder main.cpp)
-target_link_libraries(kspaceFirstOrder
+target_link_libraries(kspaceFirstOrder PRIVATE
     kspace_core
-    $<$<BOOL:${USE_CUDA}>:kspace_cuda>
-    $<$<BOOL:${USE_OPENMP}>:kspace_openmp>
-    $<$<BOOL:${PLATFORM_UNIX}>:kspace_unix>
-    $<$<BOOL:${PLATFORM_WINDOWS}>:kspace_windows>
+    kspace_openmp
+    ${HDF5_LIBRARIES}
+    ${FFTW_LIBRARIES}
+    kspace_openmp_flags
 )
 
 # Include directories for fetched dependencies

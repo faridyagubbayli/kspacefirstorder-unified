@@ -35,12 +35,13 @@ if(USE_OPENMP)
         URL_HASH SHA256=56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467
     )
 
-    set(ENABLE_OPENMP ON CACHE BOOL "")
-    set(ENABLE_THREADS ON CACHE BOOL "")
-    set(BUILD_TESTS OFF CACHE BOOL "")
-    set(DISABLE_FORTRAN ON CACHE BOOL "")
-
+    # The FFTW 3.3.10 tarball uses a very old CMake version.
+    # By setting this policy globally before making the content available,
+    # we allow our modern CMake to build it.
+    set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
     FetchContent_MakeAvailable(fftw3)
+    # Unset the policy to avoid affecting other parts of the build
+    unset(CMAKE_POLICY_VERSION_MINIMUM)
 
     set(FFTW_FOUND TRUE)
     set(FFTW_LIBRARIES fftw3)
@@ -63,8 +64,16 @@ endif()
 # Find OpenMP
 if(USE_OPENMP)
     find_package(OpenMP QUIET)
-    if(NOT OpenMP_FOUND)
-        message(WARNING "OpenMP not found - using compiler built-in support")
-        # Don't disable OpenMP, many compilers have built-in support
+    # Create a resilient INTERFACE target for OpenMP. This allows us to handle
+    # the case where the OpenMP package is not found (e.g., on default macOS).
+    add_library(kspace_openmp_flags INTERFACE)
+    if(OpenMP_FOUND)
+        message(STATUS "✓ Found OpenMP, linking against OpenMP::OpenMP_CXX")
+        target_link_libraries(kspace_openmp_flags INTERFACE OpenMP::OpenMP_CXX)
+    else()
+        message(WARNING "OpenMP package not found. Attempting to enable with -fopenmp flag.")
+        # For Clang and GCC, -fopenmp is typically sufficient for both compiling and linking.
+        target_compile_options(kspace_openmp_flags INTERFACE -fopenmp)
+        target_link_libraries(kspace_openmp_flags INTERFACE -fopenmp)
     endif()
 endif()

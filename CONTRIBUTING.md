@@ -64,13 +64,10 @@ To dramatically speed up build times, especially for the third-party dependencie
     -   **Windows:** `choco install sccache`
     -   **Linux:** Follow the [official installation instructions](https://github.com/mozilla/sccache).
 
-2.  **Configure CMake to use `sccache`:**
-    When you configure the project, set the following CMake variables:
+2.  **Configure CMake:**
+    The build system will automatically detect and use `sccache` if it is installed on your system.
     ```bash
-    cmake .. \
-      -DCMAKE_C_COMPILER_LAUNCHER=sccache \
-      -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
-      -DCMAKE_CUDA_COMPILER_LAUNCHER=sccache
+    cmake .. # Add any other flags like -DBUILD_TESTS=ON
     ```
     The first time you build, it will compile and cache the dependencies. Subsequent builds, even in a clean directory, will be significantly faster.
 

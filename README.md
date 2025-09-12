@@ -62,7 +62,7 @@ To avoid long build times when dependencies are compiled from source, we **stron
     -   **Linux:** Follow the [official installation instructions](https://github.com/mozilla/sccache).
 
 2.  **Configure and Build:**
-    Create a build directory and configure CMake to use `sccache`.
+    Simply create a build directory and run CMake. The build system will automatically detect and use `sccache` if it is installed.
 
     ```bash
     # Clone the repository
@@ -72,11 +72,8 @@ To avoid long build times when dependencies are compiled from source, we **stron
     # Create build directory
     mkdir build && cd build
 
-    # Configure with sccache
-    cmake .. \
-      -DCMAKE_C_COMPILER_LAUNCHER=sccache \
-      -DCMAKE_CXX_COMPILER_LAUNCHER=sccache \
-      -DUSE_CUDA=OFF # (or ON if you have CUDA installed)
+    # Configure the project
+    cmake .. -DUSE_CUDA=OFF # (or ON if you have CUDA installed)
 
     # Build
     cmake --build . --config Release --parallel
