@@ -542,7 +542,7 @@ along with k-Wave.
 #include <Utils/DimensionSizes.h>
 #include <hdf5.h>
 #include <hdf5_hl.h>
-
+#include <string>
 #include <map>
 
 /// Datatype of dataset names in the HDF5 files.
