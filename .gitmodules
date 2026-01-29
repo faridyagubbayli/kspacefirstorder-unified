@@ -16,9 +16,9 @@
 	shallow = true
 [submodule "repos/kspaceFirstOrder-cuda-linux"]
 	path = repos/kspaceFirstOrder-cuda-linux
-	url = https://github.com/waltsims/kspaceFirstOrder-CUDA-linux
-	branch = cuda-12-support
+	url = https://github.com/faridyagubbayli/kspaceFirstOrder-CUDA-linux
+	branch = feature/blackwell-sm120-support
 [submodule "repos/kspaceFirstOrder-cuda-windows"]
 	path = repos/kspaceFirstOrder-cuda-windows
-	url = https://github.com/waltsims/kspaceFirstOrder-CUDA-windows.git
-	branch = cuda-12-support
+	url = https://github.com/faridyagubbayli/kspaceFirstOrder-CUDA-windows.git
+	branch = feature/blackwell-sm120-support
